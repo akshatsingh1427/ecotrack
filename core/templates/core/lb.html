@@ -1,0 +1,3 @@
+{% extends 'core/base.html' %}{% block c %}{% if denied %}<div class="card">Company dashboard is only for company admins.</div>{% else %}<h2>🏆 Leaderboard · ranked by avoided CO₂</h2>
+<div class="card"><h3>Global</h3><table>{% for r in g %}<tr><td>{% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}#{{forloop.counter}}{% endif %}</td><td>{{r.user__first_name}}</td><td>{{r.v|floatformat:1}} kg avoided</td></tr>{% empty %}<tr><td>No activity yet.</td></tr>{% endfor %}</table></div>
+{% if o %}<div class="card"><h3>My company</h3><table>{% for r in o %}<tr><td>#{{forloop.counter}}</td><td>{{r.user__first_name}}</td><td>{{r.v|floatformat:1}} kg avoided</td></tr>{% endfor %}</table></div>{% endif %}{% endif %}{% endblock %}

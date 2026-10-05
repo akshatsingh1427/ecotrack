@@ -1,0 +1,6 @@
+Django>=4.2
+Pillow
+whitenoise
+dj-database-url
+gunicorn; sys_platform != "win32"
+psycopg2-binary

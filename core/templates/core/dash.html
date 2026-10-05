@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}{% block c %}
+<div class="card" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between"><div><h2 style="margin:0">{% if is_today %}Today{% else %}{{day}}{% endif %} · {{user.first_name}}</h2><a href="/?date={{prev|date:'Y-m-d'}}">← previous day</a>{% if not is_today %} · <a href="/">today</a> · <a href="/?date={{next|date:'Y-m-d'}}">next →</a>{% endif %}</div>
+<div><span class="chip">{{lvl}}</span><span class="chip">⭐ {{pts}} EcoPoints</span><span class="chip">🔥 {{streak}}-day streak</span></div></div>
+<div class="grid"><div class="card">Day total CO₂<div class="big">{{tot.t|default:0|floatformat:1}} kg</div></div><div class="card">Avoided today<div class="big">{{tot.v|default:0|floatformat:1}} kg</div></div>
+<div class="card"><b>Quick add</b><br><a class="chip" href="/log/transport/">🚇 commute</a><a class="chip" href="/log/food/">🍛 meal</a><a class="chip" href="/log/label/">🏷️ label</a><a class="chip" href="/log/energy/">❄️ energy</a></div></div>
+<div class="grid"><div class="card"><h3>Today by category</h3><canvas id="c1"></canvas></div><div class="card"><h3>Last 7 days: emitted vs avoided</h3><canvas id="c2"></canvas></div></div>
+<div class="card"><h3>Morning → Night</h3>{% for n,items,sub in tl %}<h4 style="margin:12px 0 4px">{{n}} <small>({{sub|floatformat:2}} kg)</small></h4>{% for t,x in items %}<div>{{t}} · {{x.label}} <b>{{x.co2|floatformat:2}} kg</b></div>{% empty %}<small>nothing logged</small>{% endfor %}{% endfor %}</div>
+<div class="card"><h3>Badges</h3>{% for i,n,ok in badges %}<span class="chip {% if not ok %}bad{% endif %}" style="{% if not ok %}opacity:.45{% endif %}">{{i}} {{n}}</span>{% endfor %}</div>
+{{ charts|json_script:"charts" }}{% endblock %}
+{% block js %}<script>const C=JSON.parse(document.getElementById('charts').textContent);
+if(window.Chart){new Chart(c1,{type:'doughnut',data:{labels:C.cat.l.length?C.cat.l:['Nothing yet'],datasets:[{data:C.cat.d.length?C.cat.d:[1],backgroundColor:C.cat.d.length?PAL:['#ddd']}]},options:{cutout:'62%'}});
+new Chart(c2,{type:'bar',data:{labels:C.wk.l,datasets:[{label:'Emitted kg',data:C.wk.c,backgroundColor:'#d98e5f',borderRadius:6},{label:'Avoided kg',data:C.wk.a,backgroundColor:'#4a8b5c',borderRadius:6}]}})}</script>{% endblock %}

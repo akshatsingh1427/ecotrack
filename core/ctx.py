@@ -1,0 +1,11 @@
+import random
+from django.utils.safestring import mark_safe
+Q=["Rising CO₂ is making heatwaves longer and monsoon floods more violent.","Every tonne of CO₂ we add warms the planet for centuries.","Glaciers that feed our rivers are shrinking as the air warms.","Hotter seas feed stronger storms and heavier rain.","Smog is what unburnt choices look like in the air we breathe.","Droughts and floods now arrive in the same year in many regions.","Small daily choices, multiplied by millions, change the climate.","Villages in the Himalayan belt are facing floods and landslides more often."]
+def S(bg,body):return mark_safe(f'<svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="110" fill="{bg}"/>{body}</svg>')
+SC=[("Floods",S("#9ab7c9",'<path d="M0 70 Q25 55 50 70 T100 70 T150 70 T200 70 V110 H0Z" fill="#3f7ea6"/><rect x="80" y="40" width="40" height="32" fill="#c98a5e"/><path d="M75 42 L100 22 L125 42Z" fill="#8a4f35"/><path d="M0 85 Q25 72 50 85 T100 85 T150 85 T200 85 V110 H0Z" fill="#2c6489"/>')),
+("Heatwave",S("#f2c27b",'<circle cx="150" cy="35" r="24" fill="#e2572b"/><path d="M0 90 L60 70 L120 88 L200 66 V110 H0Z" fill="#b5763f"/><path d="M20 60 q5-8 0-16 M40 62 q5-8 0-16 M60 60 q5-8 0-16" stroke="#e2572b" fill="none" stroke-width="3"/>')),
+("Wildfire",S("#caa07a",'<path d="M0 90 H200 V110 H0Z" fill="#4a3a2a"/><path d="M60 90 Q50 55 70 40 Q72 62 85 50 Q95 70 90 90Z" fill="#e8642a"/><path d="M110 90 Q105 65 120 52 Q125 70 135 62 Q142 78 138 90Z" fill="#f2a03a"/><circle cx="40" cy="25" r="14" fill="#8b8b8b"/><circle cx="62" cy="18" r="18" fill="#a0a0a0"/>')),
+("Melting glacier",S("#bfe0e4",'<path d="M0 100 L50 40 L80 70 L120 25 L170 85 L200 70 V110 H0Z" fill="#f4fbfc"/><path d="M0 100 Q50 92 100 100 T200 100 V110 H0Z" fill="#4c93b5"/>')),
+("Smog",S("#b9b49a",'<rect x="20" y="50" width="25" height="60" fill="#6b705f"/><rect x="55" y="35" width="30" height="75" fill="#7c826e"/><rect x="95" y="55" width="22" height="55" fill="#6b705f"/><rect x="130" y="30" width="35" height="80" fill="#7c826e"/><ellipse cx="100" cy="30" rx="95" ry="22" fill="#d0ccb4" opacity=".7"/>'))]
+def footer(r):
+    n,svg=random.choice(SC);return {'f_quote':random.choice(Q),'f_scene':svg,'f_name':n}

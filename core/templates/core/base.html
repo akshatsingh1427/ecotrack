@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EcoTrack · carbon, one day at a time</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#eef4e6;--g:#4a8b5c;--gd:#2f6b45;--s:#f8f2e0;--c:#d98e5f;--cd:#b06f44;--sky:#c4e3e6;--sun:#f2c75c;--t:#2b3b2f}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:radial-gradient(circle at 10% 0,#fbf3d8 0,transparent 35%),linear-gradient(170deg,var(--bg),var(--sky));color:var(--t);min-height:100vh}
+h1,h2,h3,h4{font-family:Georgia,serif}a{color:var(--gd)}
+nav{position:sticky;top:0;z-index:50;display:flex;gap:4px;align-items:center;padding:10px 24px;background:rgba(47,107,69,.94);backdrop-filter:blur(8px);flex-wrap:wrap;box-shadow:0 4px 18px rgba(0,0,0,.15)}
+nav b{color:var(--s);font-size:23px;margin-right:auto;font-family:Georgia,serif}nav a{color:#eaf2e3;text-decoration:none;padding:7px 12px;border-radius:20px;font-size:15px}nav a:hover{background:var(--g)}
+main{max-width:1060px;margin:26px auto;padding:0 16px;perspective:1100px}
+.card{background:var(--s);border-radius:20px;padding:20px;margin:14px 0;box-shadow:0 14px 30px rgba(47,107,69,.2);transition:transform .15s,box-shadow .2s;transform-style:preserve-3d}.card:hover{box-shadow:0 22px 40px rgba(47,107,69,.28)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.big{font-size:34px;color:var(--gd);font-family:Georgia,serif;transform:translateZ(30px)}
+input,select,textarea{width:100%;padding:10px;margin:5px 0 12px;border:1px solid #b9c9a8;border-radius:12px;background:#fffdf5;font:inherit}input:focus,select:focus,textarea:focus{outline:2px solid var(--g)}
+button,.btn{background:var(--c);color:#fff;border:0;padding:11px 22px;border-radius:14px;font:inherit;cursor:pointer;box-shadow:0 5px 0 var(--cd);text-decoration:none;display:inline-block}button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--cd)}
+.ok{background:#e4f0d4;border-left:5px solid var(--g);padding:14px;border-radius:12px;margin-top:12px}.er{background:#fbe5d6;border-left:5px solid var(--c);padding:12px;border-radius:12px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;text-align:left;border-bottom:1px solid #ddd5b8}.bar{height:12px;border-radius:8px;background:linear-gradient(90deg,var(--g),#a3c97f);margin:4px 0;transition:width 1s}
+.chip{display:inline-block;padding:4px 12px;border-radius:20px;background:#dcebc8;margin:2px;font-size:14px}.chip.bad{background:#f7d9c4}
+.leaf{position:fixed;font-size:38px;opacity:.22;animation:spin 16s linear infinite;pointer-events:none;z-index:0}@keyframes spin{to{transform:rotateY(360deg) translateY(24px)}}
+.foot{display:flex;gap:20px;align-items:center;max-width:1060px;margin:40px auto 20px;padding:18px;background:var(--s);border-radius:20px;box-shadow:0 10px 24px rgba(47,107,69,.2)}.fsvg{width:230px;flex:none;border-radius:12px;overflow:hidden;transform:rotate(-2deg);box-shadow:0 8px 16px rgba(0,0,0,.2)}.fsvg svg{display:block;width:100%}.foot p{font-size:19px;font-style:italic;margin:6px 0;font-family:Georgia,serif}
+.rv{opacity:0;transform:translateY(34px);transition:.8s}.rv.in{opacity:1;transform:none}canvas{max-height:260px}@media(max-width:640px){.foot{flex-direction:column}}
+</style></head><body><div class="leaf" style="top:15%;left:3%">🍃</div><div class="leaf" style="top:62%;right:4%;animation-duration:22s">🌿</div>
+<nav><b>🌍 EcoTrack</b>{% if user.is_authenticated %}<a href="/">Today</a><a href="/log/transport/">Transport</a><a href="/log/food/">Food</a><a href="/log/label/">Labels</a><a href="/log/energy/">Energy</a><a href="/log/purchases/">Purchases</a><a href="/leaderboard/">Leaderboard</a>{% if user.profile.is_admin %}<a href="/company/">Company</a>{% endif %}<form method="post" action="/logout/" style="display:inline">{% csrf_token %}<button style="padding:6px 12px;box-shadow:none">Logout</button></form>{% else %}<a href="/login/">Login</a><a href="/register/" class="btn" style="padding:7px 16px;box-shadow:none">Join free</a>{% endif %}</nav>
+<main>{% block c %}{% endblock %}</main>
+<footer class="foot"><div class="fsvg">{{f_scene}}</div><div><small>{{f_name}}</small><p>“{{f_quote}}”</p><small>EcoTrack · estimates only, not an official GHG inventory</small></div></footer>
+<script>
+document.querySelectorAll('.card').forEach(c=>{c.onmousemove=e=>{const b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;c.style.transform=`rotateY(${x*7}deg) rotateX(${-y*7}deg)`};c.onmouseleave=()=>c.style.transform=''});
+const io=new IntersectionObserver(x=>x.forEach(i=>i.isIntersecting&&i.target.classList.add('in')));document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+window.PAL=['#4a8b5c','#d98e5f','#7fb7be','#f2c75c','#9bc27a','#b0805a'];
+if(window.Chart){Chart.defaults.font.family='Segoe UI';Chart.defaults.color='#2b3b2f'}
+</script>{% block js %}{% endblock %}</body></html>
