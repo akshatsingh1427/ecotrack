@@ -2,6 +2,7 @@ services:
   - type: web
     name: ecotrack
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
     startCommand: gunicorn ecotrack.wsgi
     envVars:
@@ -13,6 +14,7 @@ services:
         fromDatabase:
           name: ecotrack-db
           property: connectionString
+
 databases:
   - name: ecotrack-db
     plan: free
